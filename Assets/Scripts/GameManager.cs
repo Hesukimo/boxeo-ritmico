@@ -5,12 +5,20 @@ public class GameManager : MonoBehaviour
     //Sistema de ritmo
     [SerializeField] public AudioSource musicSource;
     [SerializeField] public float BPM;
+    [SerializeField] public GameObject jugador;
+    [SerializeField] public GameObject enemigo;
 
     private double secondsPerBeat;
     private double dspStartTime;
     private double songTime;
     private int lastBeat = -1;
     private double lastBeatTime = 0.0;
+    private bool playerUp = true;
+    private GameObject enemigoTemp;
+
+    private float enemyChance = 1f / 3f;
+    private float positionChance = 1f / 2f;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -46,7 +54,33 @@ public class GameManager : MonoBehaviour
     }
     void OnBeat()
     {
+        if (Random.Range(0.0f, 1.0f) < enemyChance)
+        {
+            enemigoTemp = Instantiate(enemigo);
+            if (Random.Range(0.0f, 1.0f) < positionChance)
+            {
+                enemigoTemp.transform.position = new Vector3(7, transform.position.y, transform.position.z);
+            } else
+            {
+                enemigoTemp.transform.position = new Vector3(-7, transform.position.y, transform.position.z);
+            }
+        }
         //Meter cosas aquí que vayan al ritmo de la música
-        transform.position += Vector3.up; //(Prueba)
+        if (playerUp)
+        {
+            jugador.transform.position += Vector3.up;
+            playerUp = false;
+        } else
+        {
+            jugador.transform.position += Vector3.down;
+            playerUp = true;
+        }
+
+        //
+        Enemigo[] enemigos = Object.FindObjectsByType<Enemigo>(FindObjectsSortMode.None);
+        foreach (Enemigo e in enemigos)
+        {
+            e.Avanzar();
+        }
     }
 }
