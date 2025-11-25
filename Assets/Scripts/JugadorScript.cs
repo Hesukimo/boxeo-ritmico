@@ -2,23 +2,43 @@ using UnityEngine;
 
 public class Jugador : MonoBehaviour
 {
-    [SerializeField] GameObject HitboxIzq;
-    [SerializeField] GameObject HitboxDcha;
     private float HitCooldown = 0f;
     private float HitCooldownTime = 1f; //En segundos
     private float DuracionPuñetazo = 0.1f;
     private float TimerPuñetazo = 0f;
+
+    public bool ColorVerde = true; //Falso representa el amarillo
+    //Referencias
+    private SpriteRenderer Sr;
+    [SerializeField] GameObject HitboxIzq;
+    [SerializeField] GameObject HitboxDcha;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         HitboxDcha.SetActive(false);
         HitboxIzq.SetActive(false);
+        Sr = GetComponent<SpriteRenderer>();
+        Sr.color = Color.green;
     }
 
     // Update is called once per frame
     void Update()
     {
+        //Cambio de colores
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (ColorVerde)
+            {
+                Sr.color = Color.yellow;
+            } else
+            {
+                Sr.color = Color.green;
+            }
+            ColorVerde = !ColorVerde;
+        }
+
+        //Cooldown entre puñetazos
         if (HitCooldown > 0)
         {
             HitCooldown -= Time.deltaTime;
@@ -26,7 +46,7 @@ public class Jugador : MonoBehaviour
         {
             HitCooldown = 0f;
         }
-
+        //Tiempo que se mantiene activa hitbox de puñetazo
         if (TimerPuñetazo > 0)
         {
             TimerPuñetazo -= Time.deltaTime;
@@ -37,9 +57,8 @@ public class Jugador : MonoBehaviour
             HitboxIzq.SetActive(false);
             HitboxDcha.SetActive(false);
         }
-
+        //Atacar si cooldown ya terminó
         if (HitCooldown == 0f) {
-            //Activar hitbox
             if (Input.GetKeyDown(KeyCode.A))
             {
                 HitCooldown = HitCooldownTime;

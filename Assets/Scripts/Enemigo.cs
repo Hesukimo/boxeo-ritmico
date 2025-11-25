@@ -8,9 +8,20 @@ public class Enemigo : MonoBehaviour
     private Vector2 posObj;
     private Transform jugador;
     private Vector2 direction;
+    public bool ColorVerde;
+    private SpriteRenderer spriteRenderer;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        ColorVerde = Random.value > 0.5f;
+        if (ColorVerde)
+        {
+            spriteRenderer.color = Color.green;
+        } else
+        {
+            spriteRenderer.color = Color.yellow;
+        }
         posObj = transform.position;
         jugador = GameObject.Find("Jugador").GetComponent<Transform>();
         direction = new Vector2(jugador.position.x - transform.position.x, jugador.position.y - transform.position.y);

@@ -15,7 +15,7 @@ public class DetectarColision : MonoBehaviour
     }
     private void OnTriggerStay2D(Collider2D otro)
     {
-        if (otro.CompareTag("Enemigo"))
+        if (otro.CompareTag("Enemigo") && JugadorScript.ColorVerde == otro.gameObject.GetComponent<Enemigo>().ColorVerde)
         {
             Destroy(otro.gameObject);
         }
