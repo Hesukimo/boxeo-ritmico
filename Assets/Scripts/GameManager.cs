@@ -70,18 +70,7 @@ public class GameManager : MonoBehaviour
                 enemigoTemp.transform.position = new Vector3(-7, transform.position.y, transform.position.z);
             }
         }
-        //Meter cosas aquí que vayan al ritmo de la música
-        if (playerUp)
-        {
-            jugador.transform.position += Vector3.up;
-            playerUp = false;
-        } else
-        {
-            jugador.transform.position += Vector3.down;
-            playerUp = true;
-        }
 
-        //
         Enemigo[] enemigos = Object.FindObjectsByType<Enemigo>(FindObjectsSortMode.None);
         foreach (Enemigo e in enemigos)
         {
