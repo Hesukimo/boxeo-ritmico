@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     private int lastBeat = -1;
     private double lastBeatTime = 0.0;
     private bool playerUp = true;
-    private GameObject enemigoTemp;
+    public GameObject enemigoTemp;
 
     private float enemyChance = 1f / 3f;
     private float positionChance = 1f / 2f;
