@@ -13,13 +13,15 @@ public class Enemigo : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private GameObject KO;
 
-    //KO al morir los enemigos
+    //Pop-up de texto de KO al morir los enemigos
     private GameObject KOTemp;
     [SerializeField] private GameObject KOEnemigo;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        //Coger componentes
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        //Decidir color del enemigo aleatoriamente
         ColorVerde = Random.value > 0.5f;
         if (ColorVerde)
         {
@@ -29,6 +31,7 @@ public class Enemigo : MonoBehaviour
         {
             spriteRenderer.color = Color.yellow;
         }
+        //Buscar al jugador y decidir la dirección de movimiento
         posObj = transform.position;
         jugador = GameObject.Find("Jugador").GetComponent<Transform>();
         direction = new Vector2(jugador.position.x - transform.position.x, jugador.position.y - transform.position.y);
@@ -39,7 +42,7 @@ public class Enemigo : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        //Acercarnos suavemente a la posición objetivo si no es la misma que la actual
         if ((Vector2)transform.position != posObj)
         {
             {
@@ -56,11 +59,13 @@ public class Enemigo : MonoBehaviour
 
     public void Avanzar()
     {
+        //Se llama en cada OnBeat() desde GameManager. Avanza la posición objetivo una cantidad en dirección al jugador.
         posObj += new Vector2(direction.x * speed, 0);
     }
 
     public void Morir(bool Knock = true)
     {
+        //Nos destruimos a nosotros mismos y lanzamos pop-up si Knock = true.
         if (Knock)
         {
             KOTemp = Instantiate(KOEnemigo);

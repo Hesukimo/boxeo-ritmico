@@ -1,29 +1,52 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Jugador : MonoBehaviour
 {
-    [SerializeField] GameObject HitboxIzq;
-    [SerializeField] GameObject HitboxDcha;
+    //Definiciones
     private float HitCooldown = 0f;
     private float HitCooldownTime = 1f; //En segundos
-    private float DuracionPu�etazo = 0.1f;
-    private float TimerPu�etazo = 0f;
+    private float DuracionPuñetazo = 0.1f;
+    private float TimerPuñetazo = 0f;
 
+    public bool ColorVerde = true; //Falso representa el amarillo
 
-	private int combo = 0;
-	private float combotimer = 0f;
-	private float comboMaxDuration = 1.2f;
+    //Combos (mecánica experimental no implementada)
+    private int combo = 0;
+    private float combotimer = 0f;
+    private float comboMaxDuration = 1.2f;
+
+    //Referencias
+    private SpriteRenderer Sr;
+    [SerializeField] GameObject HitboxIzq;
+    [SerializeField] GameObject HitboxDcha;
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
     {
         HitboxDcha.SetActive(false);
         HitboxIzq.SetActive(false);
+        Sr = GetComponent<SpriteRenderer>();
+        Sr.color = Color.green;
     }
 
     // Update is called once per frame
     void Update()
     {
+        //Cambio de colores al presionar espacio
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (ColorVerde)
+            {
+                Sr.color = Color.yellow;
+            }
+            else
+            {
+                Sr.color = Color.green;
+            }
+            ColorVerde = !ColorVerde;
+        }
+
+        //Cooldown entre pu�etazos
         if (HitCooldown > 0)
         {
             HitCooldown -= Time.deltaTime;
@@ -32,13 +55,15 @@ public class Jugador : MonoBehaviour
             HitCooldown = 0f;
         }
 
-        if (TimerPu�etazo > 0)
+        //Tiempo que se mantiene activa hitbox de puñetazo
+        if (TimerPuñetazo > 0)
         {
-            TimerPu�etazo -= Time.deltaTime;
+            TimerPuñetazo -= Time.deltaTime;
         }
         else
         {
-            TimerPu�etazo = 0;
+            //Al terminar la duración del puñetazo, desactivamos de nuevo las 2 hitbox de daño
+            TimerPuñetazo = 0;
             HitboxIzq.SetActive(false);
             HitboxDcha.SetActive(false);
         }
@@ -56,21 +81,19 @@ public class Jugador : MonoBehaviour
             }
         }
 
-
-
         if (HitCooldown == 0f) {
             //Activar hitbox
             if (Input.GetKeyDown(KeyCode.A))
             {
                 HitCooldown = HitCooldownTime;
                 HitboxIzq.SetActive(true);
-                TimerPu�etazo = DuracionPu�etazo;
+                TimerPuñetazo = DuracionPuñetazo;
             }
             if (Input.GetKeyDown(KeyCode.D))
             {
                 HitCooldown = HitCooldownTime;
                 HitboxDcha.SetActive(true);
-                TimerPu�etazo = DuracionPu�etazo;
+                TimerPuñetazo = DuracionPuñetazo;
             }
         }
     }
@@ -86,7 +109,7 @@ public class Jugador : MonoBehaviour
                 Destroy(otro.gameObject);
                 Debug.Log("Matado enemigo izquierda");
 
-                // Le a�adido los comandos para detectar los combos por la izquierda
+                // Le añadido los comandos para detectar los combos por la izquierda
                 combo++;
                 combotimer = comboMaxDuration;
                 Debug.Log("Combo actual: " + combo);
@@ -97,7 +120,7 @@ public class Jugador : MonoBehaviour
                 Destroy(otro.gameObject);
                 Debug.Log("Matado enemigo derecha");
 
-				// Le a�adido los comandos para detectar los combos por la derecha
+				// Le añadido los comandos para detectar los combos por la derecha
 				combo++;
 				combotimer = comboMaxDuration;
 				Debug.Log("Combo actual: " + combo);
