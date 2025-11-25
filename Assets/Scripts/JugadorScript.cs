@@ -9,8 +9,13 @@ public class Jugador : MonoBehaviour
     private float DuracionPuñetazo = 0.1f;
     private float TimerPuñetazo = 0f;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+	private int combo = 0;
+	private float combotimer = 0f;
+	private float comboMaxDuration = 1.2f;
+
+	// Start is called once before the first execution of Update after the MonoBehaviour is created
+	void Start()
     {
         HitboxDcha.SetActive(false);
         HitboxIzq.SetActive(false);
@@ -37,6 +42,21 @@ public class Jugador : MonoBehaviour
             HitboxIzq.SetActive(false);
             HitboxDcha.SetActive(false);
         }
+
+
+        // --- COMBOS: por enemigos consecutivos derrotados
+
+        if (combo > 0)
+        {
+            combotimer -= Time.deltaTime;
+            if (combotimer <= 0)
+            {
+                combo = 0;
+                Debug.Log("Combo perdido");
+            }
+        }
+
+
 
         if (HitCooldown == 0f) {
             //Activar hitbox
@@ -65,13 +85,23 @@ public class Jugador : MonoBehaviour
             {
                 Destroy(otro.gameObject);
                 Debug.Log("Matado enemigo izquierda");
+
+                // Le añadido los comandos para detectar los combos por la izquierda
+                combo++;
+                combotimer = comboMaxDuration;
+                Debug.Log("Combo actual: " + combo);
             }
 
             if (Input.GetKeyDown(KeyCode.D) && derecha)
             {
                 Destroy(otro.gameObject);
                 Debug.Log("Matado enemigo derecha");
-            }
+
+				// Le añadido los comandos para detectar los combos por la derecha
+				combo++;
+				combotimer = comboMaxDuration;
+				Debug.Log("Combo actual: " + combo);
+			}
         }
     }
 }
