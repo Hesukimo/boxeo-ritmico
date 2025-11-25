@@ -12,6 +12,10 @@ public class Enemigo : MonoBehaviour
     public bool ColorVerde;
     private SpriteRenderer spriteRenderer;
     private GameObject KO;
+
+    //KO al morir los enemigos
+    private GameObject KOTemp;
+    [SerializeField] private GameObject KOEnemigo;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -44,7 +48,7 @@ public class Enemigo : MonoBehaviour
 
             if (Mathf.Abs(jugador.position.x - transform.position.x) < 1)
             {
-                Destroy(this.gameObject);
+                Morir(false);
                 KO.SetActive(true);
             }
         }
@@ -53,5 +57,15 @@ public class Enemigo : MonoBehaviour
     public void Avanzar()
     {
         posObj += new Vector2(direction.x * speed, 0);
+    }
+
+    public void Morir(bool Knock = true)
+    {
+        if (Knock)
+        {
+            KOTemp = Instantiate(KOEnemigo);
+            KOTemp.transform.position = new Vector2(transform.position.x, 2.5f);
+        }
+        Destroy(this.gameObject);
     }
 }

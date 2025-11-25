@@ -106,6 +106,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
+  ColorVerde: 0
+  KOEnemigo: {fileID: 3481836025749119145, guid: a3e251c643724bc4398b0e194d1ae391, type: 3}
 --- !u!70 &-2758489639827999295
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
