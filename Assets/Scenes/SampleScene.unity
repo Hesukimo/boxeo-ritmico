@@ -251,6 +251,8 @@ MonoBehaviour:
   BPM: 100
   jugador: {fileID: 38294490}
   enemigo: {fileID: 5649000334749920350, guid: d065ee8701bec47469725c265a1e8fe8, type: 3}
+  sprite1: {fileID: 8596640243658272642, guid: 750e6bb5b0564a143adaaca6fc8cd05c, type: 3}
+  sprite2: {fileID: -7007878464514134402, guid: c9e4250dc0a76504fa6ada7f26bafd60, type: 3}
 --- !u!212 &38294493
 SpriteRenderer:
   m_ObjectHideFlags: 0

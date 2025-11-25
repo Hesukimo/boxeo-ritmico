@@ -19,6 +19,10 @@ public class GameManager : MonoBehaviour
     private float enemyChance = 1f / 3f;
     private float positionChance = 1f / 2f;
 
+    private int tipo; //Tipo de enemigo
+    [SerializeField] Sprite sprite1;
+    [SerializeField] Sprite sprite2;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -57,6 +61,7 @@ public class GameManager : MonoBehaviour
         if (Random.Range(0.0f, 1.0f) < enemyChance)
         {
             enemigoTemp = Instantiate(enemigo);
+            Tipo();
             if (Random.Range(0.0f, 1.0f) < positionChance)
             {
                 enemigoTemp.transform.position = new Vector3(7, transform.position.y, transform.position.z);
@@ -82,5 +87,18 @@ public class GameManager : MonoBehaviour
         {
             e.Avanzar();
         }
+    }
+    //Función para definir el tipo del enemigo al aparecer
+    private void Tipo()
+    {
+        tipo = Random.Range(1, 3);
+            if(tipo == 1)
+            {
+                enemigoTemp.GetComponent<SpriteRenderer>().sprite = sprite1;
+            }
+            if (tipo == 2)
+            {
+                enemigoTemp.GetComponent<SpriteRenderer>().sprite = sprite2;
+            }
     }
 }
