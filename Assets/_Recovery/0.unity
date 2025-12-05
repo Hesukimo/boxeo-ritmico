@@ -345,9 +345,9 @@ MonoBehaviour:
   ColorVerde: 1
   HitboxIzq: {fileID: 739940266}
   HitboxDcha: {fileID: 1047297962}
-  spriteFrente: {fileID: 6725320479301141792, guid: 22a6537dbe4fc8948ac6527ffd84e0fa, type: 3}
-  spriteAtaqueIzq: {fileID: 8488429221357392218, guid: 294d624fa6fb714428976eb10849246f, type: 3}
-  spriteAtaqueDcha: {fileID: 930167191370456066, guid: f40b7cf2c66cfd44d8bf53f1b8119d1e, type: 3}
+  spriteFrente: {fileID: 0}
+  spriteAtaqueIzq: {fileID: 0}
+  spriteAtaqueDcha: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

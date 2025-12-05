@@ -5,7 +5,7 @@ public class Jugador : MonoBehaviour
     //Definiciones
     private float HitCooldown = 0f;
     private float HitCooldownTime = 1f; //En segundos
-    private float DuracionPuñetazo = 0.1f;
+    private float DuracionPuñetazo = 0.5f;
     private float TimerPuñetazo = 0f;
 
     public bool ColorVerde = true; //Falso representa el amarillo
@@ -20,6 +20,11 @@ public class Jugador : MonoBehaviour
     [SerializeField] GameObject HitboxIzq;
     [SerializeField] GameObject HitboxDcha;
 
+    //Nuevos sprites del jugador
+    [SerializeField] Sprite spriteFrente;
+    [SerializeField] Sprite spriteAtaqueIzq;
+    [SerializeField] Sprite spriteAtaqueDcha;
+
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
     {
@@ -27,6 +32,9 @@ public class Jugador : MonoBehaviour
         HitboxIzq.SetActive(false);
         Sr = GetComponent<SpriteRenderer>();
         Sr.color = Color.green;
+
+        // Este codigo es para que inicie de frente siempre
+        Sr.sprite = spriteFrente;
     }
 
     // Update is called once per frame
@@ -88,13 +96,25 @@ public class Jugador : MonoBehaviour
                 HitCooldown = HitCooldownTime;
                 HitboxIzq.SetActive(true);
                 TimerPuñetazo = DuracionPuñetazo;
+                // Debe moverse a la izquierda para atacar
+                Sr.sprite = spriteAtaqueIzq;
             }
             if (Input.GetKeyDown(KeyCode.D))
             {
                 HitCooldown = HitCooldownTime;
                 HitboxDcha.SetActive(true);
                 TimerPuñetazo = DuracionPuñetazo;
+				//Debe moverse a la drecha para atacar
+				Sr.sprite = spriteAtaqueDcha;
             }
+        }
+        else // Con este código vuelve al frente 
+        {
+            TimerPuñetazo = 0;
+            HitboxIzq.SetActive(false); 
+            HitboxDcha.SetActive(false);
+            
+            Sr.sprite = spriteFrente;
         }
     }
 
