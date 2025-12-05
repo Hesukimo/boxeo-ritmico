@@ -2,12 +2,12 @@ CARACTERÍSTICAS DEL JUEGO:
 
 PARTICIPANTES:
 
-Hesukimo - Héctor Suay
-LucyFRZ - Lucía Wen
-TeoNB - Teodosio Teofilo Nsue
-Mewis10 - Luis García
-SergiGnvs - Sergi Carpio
-gibalu - Gian Andres Bavaro
+Hesukimo - Héctor Suay;
+LucyFRZ - Lucía Wen;
+TeoNB - Teodosio Teofilo Nsue;
+Mewis10 - Luis García;
+SergiGnvs - Sergi Carpio;
+gibalu - Gian Andres Bavaro;
 
 {{RESUMEN}}
   Este proyecto de Unity contiene: un sistema de ritmo mediante el script GameManager, que genera enemigos al ritmo, y un objeto jugador con dos objetos hijo para las colisiones que puede destruir los objetos al acercarse.
