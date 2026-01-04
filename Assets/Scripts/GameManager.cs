@@ -1,4 +1,7 @@
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,6 +22,12 @@ public class GameManager : MonoBehaviour
     private float enemyChance = 1f / 3f;
     private float positionChance = 1f / 2f;
 
+    public GameObject gameOverPanel;
+    public TextMeshProUGUI gameOverText;
+    public Button reiniciar;
+
+    private bool gameOverActivo = false;
+
     private int tipo; //Tipo de enemigo
     [SerializeField] Sprite sprite1;
     [SerializeField] Sprite sprite2;
@@ -26,6 +35,12 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (gameOverPanel != null)
+            {  gameOverPanel.SetActive(false); }
+
+        if (reiniciar != null) 
+            { reiniciar.onClick.AddListener(ReiniciarEscena); }
+
         secondsPerBeat = 60.0 / BPM;
 
         // Timear inicio de la canción un pelín más tarde
@@ -47,6 +62,11 @@ public class GameManager : MonoBehaviour
             lastBeat = currentBeat;
             lastBeatTime = songTime;
             OnBeat();
+        }
+
+        if (gameOverActivo)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape)) { ReiniciarEscena(); }
         }
     }
 
@@ -89,5 +109,22 @@ public class GameManager : MonoBehaviour
             {
                 enemigoTemp.GetComponent<SpriteRenderer>().sprite = sprite2;
             }
+    }
+
+    public void GameOver()
+    {
+        if (gameOverActivo) { return; }
+        gameOverActivo = true;
+
+        if (gameOverPanel != null) { gameOverPanel.SetActive(true); }
+
+        if (gameOverText != null) 
+        { gameOverText.text = "GAME OVER\n\nR - Reiniciar\nESC"; }
+    }
+
+    public void ReiniciarEscena()
+    {
+        Time.timeScale = 1.0f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
