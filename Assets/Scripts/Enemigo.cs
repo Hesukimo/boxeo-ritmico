@@ -8,6 +8,7 @@ public class Enemigo : MonoBehaviour
     private float lerpSpeed = 0.05f;
     private Vector2 posObj;
     private Transform jugador;
+    private Jugador jugadorScript;
     private Vector2 direction;
     public bool ColorVerde;
     private SpriteRenderer spriteRenderer;
@@ -34,9 +35,10 @@ public class Enemigo : MonoBehaviour
         //Buscar al jugador y decidir la dirección de movimiento
         posObj = transform.position;
         jugador = GameObject.Find("Jugador").GetComponent<Transform>();
+        jugadorScript = GameObject.Find("Jugador").GetComponent<Jugador>();
         direction = new Vector2(jugador.position.x - transform.position.x, jugador.position.y - transform.position.y);
         direction.Normalize();
-        KO = Resources.FindObjectsOfTypeAll<GameObject>().FirstOrDefault(g => g.name == "KOJugador");
+        KO = Resources.FindObjectsOfTypeAll<GameObject>().FirstOrDefault(g => g.name == "KOEnemigo");
     }
 
     // Update is called once per frame
@@ -49,7 +51,7 @@ public class Enemigo : MonoBehaviour
                 transform.position = Vector2.Lerp(transform.position, posObj, lerpSpeed);
             }
 
-            if (Mathf.Abs(jugador.position.x - transform.position.x) < 1)
+            if (Mathf.Abs(jugadorScript.iniPos.x - transform.position.x) < 1)
             {
                 Morir(false);
                 KO.SetActive(true);

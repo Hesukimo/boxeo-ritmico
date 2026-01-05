@@ -10,17 +10,26 @@ public class Jugador : MonoBehaviour
 
     public bool ColorVerde = true; //Falso representa el amarillo
 
+    //Movimiento
+    private float lerpSpeed = 0.25f; //Velocidad de la interpolación
+    private Vector3 posObj; //Posición hacia la que nos queremos mover
+    public Vector3 iniPos;
+    private Vector3 posIzq;
+    private Vector3 posDch;
+
+    //Detecciones
+    Enemigo enemigo;
+
     //Combos (mecánica experimental no implementada)
     private int combo = 0;
     private float combotimer = 0f;
     private float comboMaxDuration = 1.2f;
 
-    //Referencias
+    ///[Referencias]
     private SpriteRenderer Sr;
-    [SerializeField] GameObject HitboxIzq;
-    [SerializeField] GameObject HitboxDcha;
-
-    //Nuevos sprites del jugador
+    //[SerializeField] GameObject HitboxIzq;
+    //[SerializeField] GameObject HitboxDcha;
+    //Sprites
     [SerializeField] Sprite spriteFrente;
     [SerializeField] Sprite spriteAtaqueIzq;
     [SerializeField] Sprite spriteAtaqueDcha;
@@ -28,8 +37,14 @@ public class Jugador : MonoBehaviour
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
     {
-        HitboxDcha.SetActive(false);
-        HitboxIzq.SetActive(false);
+        //Guardar pos inicial
+        iniPos = transform.position;
+        posIzq = new Vector2(transform.position.x - 1f, transform.position.y);
+        posDch = new Vector2(transform.position.x + 1f, transform.position.y);
+
+        //Desactivamos hitboxes
+        //HitboxDcha.SetActive(false);
+        //HitboxIzq.SetActive(false);
         Sr = GetComponent<SpriteRenderer>();
         Sr.color = Color.green;
 
@@ -40,6 +55,14 @@ public class Jugador : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Mover a posición objetivo en todo momento
+        if (transform.position != posObj)
+        {
+            {
+                transform.position = Vector2.Lerp(transform.position, posObj, lerpSpeed);
+            }
+        }
+
         //Cambio de colores al presionar espacio
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -66,17 +89,20 @@ public class Jugador : MonoBehaviour
         //Tiempo que se mantiene activa hitbox de puñetazo
         if (TimerPuñetazo > 0)
         {
+            //Actualizamos contador de tiempo de puñetazo
             TimerPuñetazo -= Time.deltaTime;
         }
         else
         {
             //Al terminar la duración del puñetazo, desactivamos de nuevo las 2 hitbox de daño
             TimerPuñetazo = 0;
-            HitboxIzq.SetActive(false);
-            HitboxDcha.SetActive(false);
+            //HitboxIzq.SetActive(false);
+            //HitboxDcha.SetActive(false);
+            posObj = iniPos;
+            Sr.sprite = spriteFrente;
         }
 
-
+        #region Experimental
         // --- COMBOS: por enemigos consecutivos derrotados
 
         if (combo > 0)
@@ -89,32 +115,39 @@ public class Jugador : MonoBehaviour
             }
         }
 
-        if (HitCooldown == 0f) {
-            //Activar hitbox
+        #endregion
+
+        //Golpear y actualizar posición
+        if (HitCooldown == 0f) { //Si el cooldown entre golpes ha terminado
+            //Activar hitbox correspondiente
             if (Input.GetKeyDown(KeyCode.A))
             {
                 HitCooldown = HitCooldownTime;
-                HitboxIzq.SetActive(true);
+                //HitboxIzq.SetActive(true);
                 TimerPuñetazo = DuracionPuñetazo;
-                // Debe moverse a la izquierda para atacar
                 Sr.sprite = spriteAtaqueIzq;
+                posObj = posIzq;
             }
             if (Input.GetKeyDown(KeyCode.D))
             {
                 HitCooldown = HitCooldownTime;
-                HitboxDcha.SetActive(true);
+                //HitboxDcha.SetActive(true);
                 TimerPuñetazo = DuracionPuñetazo;
-				//Debe moverse a la drecha para atacar
 				Sr.sprite = spriteAtaqueDcha;
+                posObj = posDch;
             }
         }
-        else // Con este código vuelve al frente 
+    }
+
+    private void OnTriggerStay2D(Collider2D otro)
+    {
+        if (otro.CompareTag("Enemigo") && TimerPuñetazo > 0f)
         {
-            TimerPuñetazo = 0;
-            HitboxIzq.SetActive(false); 
-            HitboxDcha.SetActive(false);
-            
-            Sr.sprite = spriteFrente;
+            enemigo = otro.GetComponent<Enemigo>();
+            if (ColorVerde == enemigo.ColorVerde)
+            {
+                enemigo.Morir(true);
+            }
         }
     }
 

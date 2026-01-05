@@ -18,9 +18,10 @@ public class GameManager : MonoBehaviour
     private double lastBeatTime = 0.0;
     private bool playerUp = true;
     public GameObject enemigoTemp;
+    private int beats = 0;
 
-    private float enemyChance = 1f / 3f;
-    private float positionChance = 1f / 2f;
+    private float enemyChance = 1f / 2.5f; //40%
+    private float positionChance = 1f / 2f; //50%
 
     public GameObject gameOverPanel;
     public TextMeshProUGUI gameOverText;
@@ -78,6 +79,27 @@ public class GameManager : MonoBehaviour
     }
     void OnBeat()
     {
+        beats++;
+        //Llamar funciones secundarias
+        if (beats % 2 == 0)
+        {
+            On2Beat();
+        }
+        if (beats % 4 == 0)
+        {
+            On4Beat();
+        }
+        //Avanzar enemigos
+        Enemigo[] enemigos = Object.FindObjectsByType<Enemigo>(FindObjectsSortMode.None);
+        foreach (Enemigo e in enemigos)
+        {
+            e.Avanzar();
+        }
+    }
+
+    void On2Beat()
+    {
+        //Spawneo de enemigos
         if (Random.Range(0.0f, 1.0f) < enemyChance)
         {
             enemigoTemp = Instantiate(enemigo);
@@ -85,18 +107,19 @@ public class GameManager : MonoBehaviour
             if (Random.Range(0.0f, 1.0f) < positionChance)
             {
                 enemigoTemp.transform.position = new Vector3(7, transform.position.y, transform.position.z);
-            } else
+            }
+            else
             {
                 enemigoTemp.transform.position = new Vector3(-7, transform.position.y, transform.position.z);
             }
         }
-
-        Enemigo[] enemigos = Object.FindObjectsByType<Enemigo>(FindObjectsSortMode.None);
-        foreach (Enemigo e in enemigos)
-        {
-            e.Avanzar();
-        }
     }
+
+    void On4Beat()
+    {
+        //Añadir aquí código que corre cada 4 beats (un compás entero)
+    }
+
     //Función para definir el tipo del enemigo al aparecer
     private void Tipo()
     {
