@@ -24,34 +24,58 @@ public class GameManager : MonoBehaviour
     private float positionChance = 1f / 2f; //50%
 
     public GameObject gameOverPanel;
-    public TextMeshProUGUI gameOverText;
-    public Button reiniciar;
+    public TextMeshProUGUI GameOverText;
+    public Button Reiniciar;
 
-    private bool gameOverActivo = false;
+    public bool gameOverActivo = false;
 
     private int tipo; //Tipo de enemigo
     [SerializeField] Sprite sprite1;
     [SerializeField] Sprite sprite2;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+	// VIDA
+	[SerializeField] private int vidaMaxima = 3;
+	private int vidaActual;
+	[SerializeField] private TextMeshProUGUI VidaText;
+
+	// PUNTUACIÓN
+	private int puntuacion = 0;
+	[SerializeField] private TextMeshProUGUI ScoreText;
+
+	// COMBO POR SUPERVIVENCIA
+	[SerializeField] private float tiempoSinGolpeParaCombo = 2f;
+	private float temporizadorSinGolpe = 0f;
+	private int multiplicadorSupervivencia = 1;
+	[SerializeField] private TextMeshProUGUI comboText;
+
+
+
+	// Start is called once before the first execution of Update after the MonoBehaviour is created
+	void Start()
     {
         if (gameOverPanel != null)
             {  gameOverPanel.SetActive(false); }
 
-        if (reiniciar != null) 
-            { reiniciar.onClick.AddListener(ReiniciarEscena); }
+        if (Reiniciar != null) 
+            { Reiniciar.onClick.AddListener(ReiniciarEscena); }
 
         secondsPerBeat = 60.0 / BPM;
 
-        // Timear inicio de la canción un pelín más tarde
-        dspStartTime = AudioSettings.dspTime + 1f;
+		vidaActual = vidaMaxima;
+		ActualizarVidaUI();
+		ActualizarScoreUI();
+
+		// Timear inicio de la canción un pelín más tarde
+		dspStartTime = AudioSettings.dspTime + 1f;
         musicSource.loop = true; // Poner canción en bucle
         musicSource.PlayScheduled(dspStartTime);
-    }
 
-    // Update is called once per frame
-    void Update()
+		
+
+	}
+
+	// Update is called once per frame
+	void Update()
     {
         //Sistema de ritmo
         songTime = AudioSettings.dspTime - dspStartTime;
@@ -65,14 +89,36 @@ public class GameManager : MonoBehaviour
             OnBeat();
         }
 
+        //Reiniciar partida sin quieres pulsar el botón
         if (gameOverActivo)
         {
             if (Input.GetKeyDown(KeyCode.Escape)) { ReiniciarEscena(); }
         }
-    }
 
-    //Función que comprueba lo cerca que se está de un beat y lo devuelve de 0 a 1, 0 = lo más alejado del beat posible (contratiempo) y 1 exacto
-    public double ComprobarRitmo()
+        //Temporizador para el combo
+		if (!gameOverActivo)
+		{
+			temporizadorSinGolpe += Time.unscaledDeltaTime;
+
+			if (temporizadorSinGolpe >= tiempoSinGolpeParaCombo)
+			{
+				temporizadorSinGolpe = 0f;
+				multiplicadorSupervivencia *= 2;
+
+				Debug.Log("Multiplicador de supervivencia: x" + multiplicadorSupervivencia);
+			}
+		}
+
+		if (comboText != null)
+		{
+			comboText.text = "x" + multiplicadorSupervivencia;
+		}
+		
+
+	}
+
+	//Función que comprueba lo cerca que se está de un beat y lo devuelve de 0 a 1, 0 = lo más alejado del beat posible (contratiempo) y 1 exacto
+	public double ComprobarRitmo()
     {
         double recentTime = songTime - lastBeatTime; //Tiempo que ha pasado desde el último beat
         return System.Math.Abs(1 - System.Math.Min(recentTime, (lastBeatTime + secondsPerBeat) - recentTime) / (secondsPerBeat / 2d));
@@ -117,8 +163,9 @@ public class GameManager : MonoBehaviour
 
     void On4Beat()
     {
-        //Añadir aquí código que corre cada 4 beats (un compás entero)
-    }
+		if (gameOverActivo) { return; }
+		//Añadir aquí código que corre cada 4 beats (un compás entero)
+	}
 
     //Función para definir el tipo del enemigo al aparecer
     private void Tipo()
@@ -134,15 +181,62 @@ public class GameManager : MonoBehaviour
             }
     }
 
-    public void GameOver()
+	public void QuitarVida(int cantidad = 1)
+	{
+		temporizadorSinGolpe = 0f;
+		multiplicadorSupervivencia = 1;
+
+		if (gameOverActivo) return;
+
+		vidaActual -= cantidad;
+		if (vidaActual < 0) vidaActual = 0;
+
+		ActualizarVidaUI();
+
+		if (vidaActual <= 0)
+		{
+			GameOver();
+		}
+		
+	}
+
+	public void SumarPuntos(int puntos)
+	{
+		puntuacion += puntos * multiplicadorSupervivencia;
+
+		ActualizarScoreUI();
+	}
+
+	private void ActualizarVidaUI()
+	{
+		if (VidaText != null)
+			VidaText.text = "VIDA: " + vidaActual;
+	}
+
+	private void ActualizarScoreUI()
+	{
+		if (ScoreText != null)
+			ScoreText.text = "SCORE: " + puntuacion;
+	}
+
+	public void GameOver()
     {
+
         if (gameOverActivo) { return; }
         gameOverActivo = true;
 
-        if (gameOverPanel != null) { gameOverPanel.SetActive(true); }
+		Time.timeScale = 0f;
 
-        if (gameOverText != null) 
-        { gameOverText.text = "GAME OVER\n\nR - Reiniciar\nESC"; }
+		if (musicSource != null && musicSource.isPlaying)
+		{
+			musicSource.Stop();
+		}
+
+
+		if (gameOverPanel != null) { gameOverPanel.SetActive(true); }
+
+        if (GameOverText != null) 
+        { GameOverText.text = "GAME OVER\n\n" + "PUNTUACIÓN: " + puntuacion; }
     }
 
     public void ReiniciarEscena()

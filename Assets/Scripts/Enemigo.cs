@@ -17,7 +17,10 @@ public class Enemigo : MonoBehaviour
     //Pop-up de texto de KO al morir los enemigos
     private GameObject KOTemp;
     [SerializeField] private GameObject KOEnemigo;
-    void Start()
+
+	private GameManager gameManager;
+
+	void Start()
     {
         //Coger componentes
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -39,22 +42,33 @@ public class Enemigo : MonoBehaviour
         direction = new Vector2(jugador.position.x - transform.position.x, jugador.position.y - transform.position.y);
         direction.Normalize();
         KO = Resources.FindObjectsOfTypeAll<GameObject>().FirstOrDefault(g => g.name == "KOEnemigo");
-    }
 
-    // Update is called once per frame
-    void Update()
+		gameManager = FindFirstObjectByType<GameManager>();
+
+	}
+
+	// Update is called once per frame
+	void Update()
     {
-        //Acercarnos suavemente a la posición objetivo si no es la misma que la actual
-        if ((Vector2)transform.position != posObj)
-        {
+		if (!gameManager.gameOverActivo) {
+			//Acercarnos suavemente a la posición objetivo si no es la misma que la actual
+			if ((Vector2)transform.position != posObj)
             {
-                transform.position = Vector2.Lerp(transform.position, posObj, lerpSpeed);
-            }
+                {
+                    transform.position = Vector2.Lerp(transform.position, posObj, lerpSpeed);
+                }
 
-            if (Mathf.Abs(jugadorScript.iniPos.x - transform.position.x) < 1)
-            {
-                Morir(false);
+                if (Mathf.Abs(jugadorScript.iniPos.x - transform.position.x) < 1)
+                {
+				    if (gameManager != null) 
+                    { 
+                    gameManager.QuitarVida(1);
+                    }
+					
+
+				Morir(false);
                 KO.SetActive(true);
+                }
             }
         }
     }
@@ -73,6 +87,12 @@ public class Enemigo : MonoBehaviour
             KOTemp = Instantiate(KOEnemigo);
             KOTemp.transform.position = new Vector2(transform.position.x, 2.5f);
         }
-        Destroy(this.gameObject);
+
+		if (gameManager != null && Knock)
+		{
+			gameManager.SumarPuntos(100);
+		}
+
+		Destroy(this.gameObject);
     }
 }

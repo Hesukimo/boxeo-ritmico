@@ -20,10 +20,7 @@ public class Jugador : MonoBehaviour
     //Detecciones
     Enemigo enemigo;
 
-    //Combos (mecánica experimental no implementada)
-    private int combo = 0;
-    private float combotimer = 0f;
-    private float comboMaxDuration = 1.2f;
+    
 
     ///[Referencias]
     private SpriteRenderer Sr;
@@ -34,11 +31,17 @@ public class Jugador : MonoBehaviour
     [SerializeField] Sprite spriteAtaqueIzq;
     [SerializeField] Sprite spriteAtaqueDcha;
 
+	private GameManager gameManager;
+
+
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
     {
-        //Guardar pos inicial
-        iniPos = transform.position;
+
+		gameManager = FindFirstObjectByType<GameManager>();
+
+		//Guardar pos inicial
+		iniPos = transform.position;
         posIzq = new Vector2(transform.position.x - 1f, transform.position.y);
         posDch = new Vector2(transform.position.x + 1f, transform.position.y);
 
@@ -50,6 +53,8 @@ public class Jugador : MonoBehaviour
 
         // Este codigo es para que inicie de frente siempre
         Sr.sprite = spriteFrente;
+
+
     }
 
     // Update is called once per frame
@@ -102,20 +107,7 @@ public class Jugador : MonoBehaviour
             Sr.sprite = spriteFrente;
         }
 
-        #region Experimental
-        // --- COMBOS: por enemigos consecutivos derrotados
-
-        if (combo > 0)
-        {
-            combotimer -= Time.deltaTime;
-            if (combotimer <= 0)
-            {
-                combo = 0;
-                Debug.Log("Combo perdido");
-            }
-        }
-
-        #endregion
+        
 
         //Golpear y actualizar posición
         if (HitCooldown == 0f) { //Si el cooldown entre golpes ha terminado
@@ -162,10 +154,12 @@ public class Jugador : MonoBehaviour
                 Destroy(otro.gameObject);
                 Debug.Log("Matado enemigo izquierda");
 
-                // Le añadido los comandos para detectar los combos por la izquierda
-                combo++;
-                combotimer = comboMaxDuration;
-                Debug.Log("Combo actual: " + combo);
+                if (gameManager != null)
+                {
+                    gameManager.SumarPuntos(100);
+                }
+
+				
             }
 
             if (Input.GetKeyDown(KeyCode.D) && derecha)
@@ -173,10 +167,11 @@ public class Jugador : MonoBehaviour
                 Destroy(otro.gameObject);
                 Debug.Log("Matado enemigo derecha");
 
-				// Le añadido los comandos para detectar los combos por la derecha
-				combo++;
-				combotimer = comboMaxDuration;
-				Debug.Log("Combo actual: " + combo);
+				if (gameManager != null)
+				{
+					gameManager.SumarPuntos(100);
+				}
+				
 			}
         }
     }
