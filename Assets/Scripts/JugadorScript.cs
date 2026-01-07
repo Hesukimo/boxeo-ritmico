@@ -4,8 +4,8 @@ public class Jugador : MonoBehaviour
 {
     //Definiciones
     private float HitCooldown = 0f;
-    private float HitCooldownTime = 1f; //En segundos
-    private float DuracionPuñetazo = 0.5f;
+    static public float HitCooldownTime {get; set;} = 1f;  //En segundos
+    static private float DuracionPuñetazo = 0.5f;
     private float TimerPuñetazo = 0f;
 
     public bool ColorVerde = true; //Falso representa el amarillo
@@ -20,12 +20,9 @@ public class Jugador : MonoBehaviour
     //Detecciones
     Enemigo enemigo;
 
-    
-
     ///[Referencias]
     private SpriteRenderer Sr;
-    //[SerializeField] GameObject HitboxIzq;
-    //[SerializeField] GameObject HitboxDcha;
+
     //Sprites
     [SerializeField] Sprite spriteFrente;
     [SerializeField] Sprite spriteAtaqueIzq;
@@ -46,8 +43,6 @@ public class Jugador : MonoBehaviour
         posDch = new Vector2(transform.position.x + 1f, transform.position.y);
 
         //Desactivamos hitboxes
-        //HitboxDcha.SetActive(false);
-        //HitboxIzq.SetActive(false);
         Sr = GetComponent<SpriteRenderer>();
         Sr.color = Color.green;
 
@@ -55,6 +50,14 @@ public class Jugador : MonoBehaviour
         Sr.sprite = spriteFrente;
 
 
+    }
+
+    static public void AumentarVelocidad()
+    {
+        HitCooldownTime *= 2 - GameManager.SpeedMultiplier;
+        DuracionPuñetazo *= 2 - GameManager.SpeedMultiplier;
+        Debug.Log(HitCooldownTime);
+        Debug.Log(DuracionPuñetazo);
     }
 
     // Update is called once per frame
@@ -101,13 +104,9 @@ public class Jugador : MonoBehaviour
         {
             //Al terminar la duración del puñetazo, desactivamos de nuevo las 2 hitbox de daño
             TimerPuñetazo = 0;
-            //HitboxIzq.SetActive(false);
-            //HitboxDcha.SetActive(false);
             posObj = iniPos;
             Sr.sprite = spriteFrente;
         }
-
-        
 
         //Golpear y actualizar posición
         if (HitCooldown == 0f) { //Si el cooldown entre golpes ha terminado
@@ -115,7 +114,6 @@ public class Jugador : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.A))
             {
                 HitCooldown = HitCooldownTime;
-                //HitboxIzq.SetActive(true);
                 TimerPuñetazo = DuracionPuñetazo;
                 Sr.sprite = spriteAtaqueIzq;
                 posObj = posIzq;
@@ -123,7 +121,6 @@ public class Jugador : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.D))
             {
                 HitCooldown = HitCooldownTime;
-                //HitboxDcha.SetActive(true);
                 TimerPuñetazo = DuracionPuñetazo;
 				Sr.sprite = spriteAtaqueDcha;
                 posObj = posDch;
@@ -158,8 +155,6 @@ public class Jugador : MonoBehaviour
                 {
                     gameManager.SumarPuntos(100);
                 }
-
-				
             }
 
             if (Input.GetKeyDown(KeyCode.D) && derecha)

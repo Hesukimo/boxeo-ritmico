@@ -35,6 +35,7 @@ public class Enemigo : MonoBehaviour
         {
             spriteRenderer.color = Color.yellow;
         }
+
         //Buscar al jugador y decidir la dirección de movimiento
         posObj = transform.position;
         jugador = GameObject.Find("Jugador").GetComponent<Transform>();

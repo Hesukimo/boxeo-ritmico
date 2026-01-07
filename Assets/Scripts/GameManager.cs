@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using Mono.Cecil.Cil;
 using NUnit.Framework;
 using TMPro;
 using UnityEngine;
@@ -43,8 +44,10 @@ public class GameManager : MonoBehaviour
 
 	// PUNTUACIÓN
 	private int puntuacion = 0;
-	[SerializeField] private TextMeshProUGUI ScoreText;
-    private static List<int> puntuaciones = new List<int>() {100, 300, 2400};
+    private int thresholdSpeedup = 1000; //Cada cuántos puntos aumentar la velocidad
+    [SerializeField] static public float SpeedMultiplier = 1.25f; //Por cuánto aumentar la velocidad
+    [SerializeField] private TextMeshProUGUI ScoreText;
+    private static List<int> puntuaciones = new List<int>() {};
     [SerializeField] private TextMeshProUGUI puntosText;
 
 	// COMBO POR SUPERVIVENCIA
@@ -52,8 +55,6 @@ public class GameManager : MonoBehaviour
 	private float temporizadorSinGolpe = 0f;
 	private int multiplicadorSupervivencia = 1;
 	[SerializeField] private TextMeshProUGUI comboText;
-
-
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
@@ -115,9 +116,15 @@ public class GameManager : MonoBehaviour
 		{
 			comboText.text = "x" + multiplicadorSupervivencia;
 		}
-		
-
 	}
+
+    public void AumentarVelocidad()
+    {
+        BPM *= SpeedMultiplier;
+        secondsPerBeat = 60.0 / BPM;
+        musicSource.pitch *= SpeedMultiplier;
+        Jugador.AumentarVelocidad();
+    }
 
 	//Función que comprueba lo cerca que se está de un beat y lo devuelve de 0 a 1, 0 = lo más alejado del beat posible (contratiempo) y 1 exacto
 	public double ComprobarRitmo()
@@ -206,8 +213,11 @@ public class GameManager : MonoBehaviour
 	public void SumarPuntos(int puntos)
 	{
 		puntuacion += puntos * multiplicadorSupervivencia;
-
-		ActualizarScoreUI();
+        if (puntuacion % thresholdSpeedup == 0)
+        {
+            AumentarVelocidad();
+        }
+        ActualizarScoreUI();
 	}
 
 	private void ActualizarVidaUI()
@@ -236,7 +246,6 @@ public class GameManager : MonoBehaviour
 			musicSource.Stop();
 		}
 
-
 		if (gameOverPanel != null) { gameOverPanel.SetActive(true); }
 
         if (GameOverText != null) 
@@ -246,9 +255,9 @@ public class GameManager : MonoBehaviour
 			int limite = Mathf.Min(10, puntuaciones.Count);
             for (int i = puntuaciones.Count - 1; i >= puntuaciones.Count - limite; i--)
             {
-                //puntosText.text += "\n" + puntuaciones[i];
+                puntosText.text += "\n" + puntuaciones[i];
             }
-            puntosText.text = TextoRecursivo(puntuaciones.Count - 1, puntuaciones.Count - limite);
+            //puntosText.text = TextoRecursivo(puntuaciones.Count - 1, puntuaciones.Count - limite);
         }
     }
 
@@ -258,7 +267,6 @@ public class GameManager : MonoBehaviour
         {
             return "";
         }
-
         return "\n" + puntuaciones[indice] + TextoRecursivo(indice - 1, limite);
     }
 
