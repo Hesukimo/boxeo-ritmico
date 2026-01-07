@@ -53,5 +53,6 @@ gibalu - Gian Andres Bavaro;
 [[ESRATEGIA ALGORÍTMICA]]
 
   Utilizamos el Divide y Vencerás en el script de GameManager para mostrar y organizar las anteriores puntuaciones del jugador de mayor a menos. Solo se muestran las 10 mayores. Para poder organizar la nueva puntuación que ha alcanzado el jugador al activar un Game Over. Utilizamos uno de los 2 métodos para encontrar la posición en la que poner la nueva puntuación y con el otro lo insertamos en dicha posición. El coste temporal es O(log n) al dividir los datos, lo cual lo vuelve rapídisimo. El coste espacial es O(1) al usar la inserción.
-https://github.com/user-attachments/assets/828b0907-3a6f-447a-8589-46e014f34a39
+![Divide](https://github.com/user-attachments/assets/97536f4f-5ee0-4dab-a7d5-247d8b947b41)
+
 
