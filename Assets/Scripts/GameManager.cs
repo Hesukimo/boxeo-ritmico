@@ -158,6 +158,7 @@ public class GameManager : MonoBehaviour
             else
             {
                 enemigoTemp.transform.position = new Vector3(-7, transform.position.y, transform.position.z);
+                enemigoTemp.GetComponent<SpriteRenderer>().flipX = true;
             }
         }
     }
