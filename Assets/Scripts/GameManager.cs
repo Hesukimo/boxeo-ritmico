@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using NUnit.Framework;
 using TMPro;
 using UnityEngine;
@@ -243,11 +244,22 @@ public class GameManager : MonoBehaviour
 			puntosText.text = "Récord";
             puntosText.enabled = true;
 			int limite = Mathf.Min(10, puntuaciones.Count);
-			for (int i = puntuaciones.Count - 1; i >= puntuaciones.Count - limite; i--)
-			{
-                puntosText.text += "\n" + puntuaciones[i];
+            for (int i = puntuaciones.Count - 1; i >= puntuaciones.Count - limite; i--)
+            {
+                //puntosText.text += "\n" + puntuaciones[i];
             }
+            puntosText.text = TextoRecursivo(puntuaciones.Count - 1, puntuaciones.Count - limite);
         }
+    }
+
+    public string TextoRecursivo(int indice, int limite)
+    {
+        if (indice < limite)
+        {
+            return "";
+        }
+
+        return "\n" + puntuaciones[indice] + TextoRecursivo(indice - 1, limite);
     }
 
     public void ReiniciarEscena()
