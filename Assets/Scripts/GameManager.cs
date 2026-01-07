@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
 	// PUNTUACIÓN
 	private int puntuacion = 0;
 	[SerializeField] private TextMeshProUGUI ScoreText;
-    private List<int> puntuaciones = new List<int>() {100, 300, 2400};
+    private static List<int> puntuaciones = new List<int>() {100, 300, 2400};
     [SerializeField] private TextMeshProUGUI puntosText;
 
 	// COMBO POR SUPERVIVENCIA
@@ -69,14 +69,11 @@ public class GameManager : MonoBehaviour
 		ActualizarVidaUI();
 		ActualizarScoreUI();
 
-		// Timear inicio de la canción un pelín más tarde
-		dspStartTime = AudioSettings.dspTime + 1f;
+        // Timear inicio de la canción un pelín más tarde
+        dspStartTime = AudioSettings.dspTime + 1f;
         musicSource.loop = true; // Poner canción en bucle
         musicSource.PlayScheduled(dspStartTime);
-
-		
-
-	}
+    }
 
 	// Update is called once per frame
 	void Update()
