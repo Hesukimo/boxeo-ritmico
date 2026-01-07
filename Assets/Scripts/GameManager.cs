@@ -1,7 +1,9 @@
-using UnityEngine;
+using System.Collections.Generic;
+using NUnit.Framework;
 using TMPro;
-using UnityEngine.UI;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -41,6 +43,8 @@ public class GameManager : MonoBehaviour
 	// PUNTUACIÓN
 	private int puntuacion = 0;
 	[SerializeField] private TextMeshProUGUI ScoreText;
+    private List<int> puntuaciones = new List<int>() {100, 300, 2400};
+    [SerializeField] private TextMeshProUGUI puntosText;
 
 	// COMBO POR SUPERVIVENCIA
 	[SerializeField] private float tiempoSinGolpeParaCombo = 2f;
@@ -221,8 +225,9 @@ public class GameManager : MonoBehaviour
 
 	public void GameOver()
     {
+		InsertarOrdenado(puntuaciones, puntuacion);
 
-        if (gameOverActivo) { return; }
+		if (gameOverActivo) { return; }
         gameOverActivo = true;
 
 		Time.timeScale = 0f;
@@ -236,12 +241,52 @@ public class GameManager : MonoBehaviour
 		if (gameOverPanel != null) { gameOverPanel.SetActive(true); }
 
         if (GameOverText != null) 
-        { GameOverText.text = "GAME OVER\n\n" + "PUNTUACIÓN: " + puntuacion; }
+        { GameOverText.text = "GAME OVER\n\n" + "PUNTUACIÓN: " + puntuacion;
+			puntosText.text = "Récord";
+            puntosText.enabled = true;
+			int limite = Mathf.Min(10, puntuaciones.Count);
+			for (int i = puntuaciones.Count - 1; i >= puntuaciones.Count - limite; i--)
+			{
+                puntosText.text += "\n" + puntuaciones[i];
+            }
+        }
     }
 
     public void ReiniciarEscena()
     {
         Time.timeScale = 1.0f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    int OrdenarPuntuacion(List<int> puntuaciones, int puntuacion)
+    {
+        int izquierda = 0;
+        int derecha = puntuaciones.Count - 1;
+
+        while (izquierda <= derecha)
+        {
+            int medio = (izquierda + derecha) / 2;
+
+            if (puntuaciones[medio] == puntuacion)
+            {
+                return medio;
+            }
+
+            if (puntuaciones[medio] < puntuacion)
+            {
+                izquierda = medio + 1;
+            }
+            else
+            {
+                derecha = medio - 1;
+            }
+        }
+		return izquierda;
+	}
+
+    void InsertarOrdenado(List<int> puntuaciones, int puntuacion)
+    {
+        int posicion = OrdenarPuntuacion(puntuaciones, puntuacion);
+        puntuaciones.Insert(posicion, puntuacion);
     }
 }
