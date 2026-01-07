@@ -41,4 +41,8 @@ gibalu - Gian Andres Bavaro;
   El jugador fallando golpes (color diferente enemigo):
   ![Color-ezgif com-crop](https://github.com/user-attachments/assets/c28feac7-7fb4-48d9-ae87-881cda7453f0)
 
+[[PROBABILIDAD]]
+
+  En este juego se utiliza la probabilidad uniforme en dos scripts. Una en GameManager para definir si salen enemigos con un 40% y un 50% de porque lado salgan (izquierda o derecha). La otra instancia de probabilidad está en el script de enemigo, en el que se dictamina el color del enemigo con un 50% de verde y 50% de amarillo.
+![Probabilidad](https://github.com/user-attachments/assets/78223bf5-465a-4635-8807-e2fcb15b3759)
 
