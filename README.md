@@ -46,3 +46,7 @@ gibalu - Gian Andres Bavaro;
   En este juego se utiliza la probabilidad uniforme en dos scripts. Una en GameManager para definir si salen enemigos con un 40% y un 50% de porque lado salgan (izquierda o derecha). La otra instancia de probabilidad está en el script de enemigo, en el que se dictamina el color del enemigo con un 50% de verde y 50% de amarillo.
 ![Probabilidad](https://github.com/user-attachments/assets/78223bf5-465a-4635-8807-e2fcb15b3759)
 
+[[ITERATIVO/RECURSIVO]]
+
+  En ambos métodos el coste temporal en el peor caso es igual a O(10) ya que es el máximo que recorrerá el for o el recursivo. En el método iterativo el coste espacial es O(1) al solo almacenar 1 variable mientras que en el método recursivo es igual a O(10) al almacenar todas las variables del recorrido. En cuanto a legibilidad el iterativo es más simple en cuanto al recursivo. Por ende, decidimos utilizar el iterativo al ser más simple de leer y tener menor coste espacial.
+
