@@ -33,6 +33,11 @@ gibalu - Gian Andres Bavaro;
   Las dos hitbox (izquierda y derecha) son activadas y desactivadas por el script de su padre, JugadorScript.cs, dependiendo de si se ha presionado la tecla de golpe izquierdo o derecho. En el script se puede customizar el cooldown entre golpes y el tiempo que dura activa la hitbox con las variables DuracionPuñetazo y HitCooldownTime.
   El jugador puede cambiar su variable ColorVerde que representa el color del boxeador (true = verde, false = amarillo), que se invierte al presionar el botón espacio.
 
+  [[SPEED-UP]]
+
+    Cada ciertos puntos obtenidos, la velocidad de aparición y movimiento de los enemigos y de la música aumentan para aumentar la dificultad del juego.
+    Actualiza el BPM interno y el pitch.
+
 [[SHOWCASE]]
 
   El jugador acertando golpes (mismo color que enemigo):
