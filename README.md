@@ -50,3 +50,8 @@ gibalu - Gian Andres Bavaro;
 
   En ambos métodos el coste temporal en el peor caso es igual a O(10) ya que es el máximo que recorrerá el for o el recursivo. En el método iterativo el coste espacial es O(1) al solo almacenar 1 variable mientras que en el método recursivo es igual a O(10) al almacenar todas las variables del recorrido. En cuanto a legibilidad el iterativo es más simple en cuanto al recursivo. Por ende, decidimos utilizar el iterativo al ser más simple de leer y tener menor coste espacial.
 
+[[ESRATEGIA ALGORÍTMICA]]
+
+  Utilizamos el Divide y Vencerás en el script de GameManager para mostrar y organizar las anteriores puntuaciones del jugador de mayor a menos. Solo se muestran las 10 mayores. Para poder organizar la nueva puntuación que ha alcanzado el jugador al activar un Game Over. Utilizamos uno de los 2 métodos para encontrar la posición en la que poner la nueva puntuación y con el otro lo insertamos en dicha posición. El coste temporal es O(log n) al dividir los datos, lo cual lo vuelve rapídisimo. El coste espacial es O(1) al usar la inserción.
+https://github.com/user-attachments/assets/828b0907-3a6f-447a-8589-46e014f34a39
+
