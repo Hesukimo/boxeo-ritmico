@@ -36,7 +36,7 @@ public class Enemigo : MonoBehaviour
             spriteRenderer.color = Color.yellow;
         }
 
-        //Buscar al jugador y decidir la dirección de movimiento
+        //Buscar al jugador y decidir la direcciï¿½n de movimiento
         posObj = transform.position;
         jugador = GameObject.Find("Jugador").GetComponent<Transform>();
         jugadorScript = GameObject.Find("Jugador").GetComponent<Jugador>();
@@ -52,7 +52,7 @@ public class Enemigo : MonoBehaviour
 	void Update()
     {
 		if (!gameManager.gameOverActivo) {
-			//Acercarnos suavemente a la posición objetivo si no es la misma que la actual
+			//Acercarnos suavemente a la posiciï¿½n objetivo si no es la misma que la actual
 			if ((Vector2)transform.position != posObj)
             {
                 {
@@ -76,7 +76,7 @@ public class Enemigo : MonoBehaviour
 
     public void Avanzar()
     {
-        //Se llama en cada OnBeat() desde GameManager. Avanza la posición objetivo una cantidad en dirección al jugador.
+        //Se llama en cada OnBeat() desde GameManager. Avanza la posiciï¿½n objetivo una cantidad en direcciï¿½n al jugador.
         posObj += new Vector2(direction.x * speed, 0);
     }
 
@@ -92,6 +92,10 @@ public class Enemigo : MonoBehaviour
 		if (gameManager != null && Knock)
 		{
 			gameManager.SumarPuntos(100);
+            if (extrapoints = true)
+            {
+                gameManager.SumarPuntos(100);
+            }
 		}
 
 		Destroy(this.gameObject);

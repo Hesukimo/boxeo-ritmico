@@ -26,6 +26,8 @@ public class GameManager : MonoBehaviour
 
     private float enemyChance = 1f / 2.5f; //40%
     private float positionChance = 1f / 2f; //50%
+    private float critchance = 1f / 10f; //10%
+    bool extrapoints = false;
 
     public GameObject gameOverPanel;
     public TextMeshProUGUI GameOverText;
@@ -42,10 +44,10 @@ public class GameManager : MonoBehaviour
 	private int vidaActual;
 	[SerializeField] private TextMeshProUGUI VidaText;
 
-	// PUNTUACIÓN
+	// PUNTUACIï¿½N
 	private int puntuacion = 0;
-    private int thresholdSpeedup = 1000; //Cada cuántos puntos aumentar la velocidad
-    [SerializeField] static public float SpeedMultiplier = 1.25f; //Por cuánto aumentar la velocidad
+    private int thresholdSpeedup = 1000; //Cada cuï¿½ntos puntos aumentar la velocidad
+    [SerializeField] static public float SpeedMultiplier = 1.25f; //Por cuï¿½nto aumentar la velocidad
     [SerializeField] private TextMeshProUGUI ScoreText;
     private static List<int> puntuaciones = new List<int>() {};
     [SerializeField] private TextMeshProUGUI puntosText;
@@ -71,9 +73,9 @@ public class GameManager : MonoBehaviour
 		ActualizarVidaUI();
 		ActualizarScoreUI();
 
-        // Timear inicio de la canción un pelín más tarde
+        // Timear inicio de la canciï¿½n un pelï¿½n mï¿½s tarde
         dspStartTime = AudioSettings.dspTime + 1f;
-        musicSource.loop = true; // Poner canción en bucle
+        musicSource.loop = true; // Poner canciï¿½n en bucle
         musicSource.PlayScheduled(dspStartTime);
     }
 
@@ -92,7 +94,7 @@ public class GameManager : MonoBehaviour
             OnBeat();
         }
 
-        //Reiniciar partida sin quieres pulsar el botón
+        //Reiniciar partida sin quieres pulsar el botï¿½n
         if (gameOverActivo)
         {
             if (Input.GetKeyDown(KeyCode.Escape)) { ReiniciarEscena(); }
@@ -126,10 +128,10 @@ public class GameManager : MonoBehaviour
         Jugador.AumentarVelocidad();
     }
 
-	//Función que comprueba lo cerca que se está de un beat y lo devuelve de 0 a 1, 0 = lo más alejado del beat posible (contratiempo) y 1 exacto
+	//Funciï¿½n que comprueba lo cerca que se estï¿½ de un beat y lo devuelve de 0 a 1, 0 = lo mï¿½s alejado del beat posible (contratiempo) y 1 exacto
 	public double ComprobarRitmo()
     {
-        double recentTime = songTime - lastBeatTime; //Tiempo que ha pasado desde el último beat
+        double recentTime = songTime - lastBeatTime; //Tiempo que ha pasado desde el ï¿½ltimo beat
         return System.Math.Abs(1 - System.Math.Min(recentTime, (lastBeatTime + secondsPerBeat) - recentTime) / (secondsPerBeat / 2d));
     }
     void OnBeat()
@@ -168,16 +170,24 @@ public class GameManager : MonoBehaviour
                 enemigoTemp.transform.position = new Vector3(-7, transform.position.y, transform.position.z);
                 enemigoTemp.GetComponent<SpriteRenderer>().flipX = true;
             }
+            if (Random.Range(0.0f, 1.0f) < critchance)
+            {
+                extrapoints = true;
+            }
+            else
+            {
+                extrapoints = false;
+            }
         }
     }
 
     void On4Beat()
     {
 		if (gameOverActivo) { return; }
-		//Añadir aquí código que corre cada 4 beats (un compás entero)
+		//Aï¿½adir aquï¿½ cï¿½digo que corre cada 4 beats (un compï¿½s entero)
 	}
 
-    //Función para definir el tipo del enemigo al aparecer
+    //Funciï¿½n para definir el tipo del enemigo al aparecer
     private void Tipo()
     {
         tipo = Random.Range(1, 3);
@@ -249,8 +259,8 @@ public class GameManager : MonoBehaviour
 		if (gameOverPanel != null) { gameOverPanel.SetActive(true); }
 
         if (GameOverText != null) 
-        { GameOverText.text = "GAME OVER\n\n" + "PUNTUACIÓN: " + puntuacion;
-			puntosText.text = "Récord";
+        { GameOverText.text = "GAME OVER\n\n" + "PUNTUACIï¿½N: " + puntuacion;
+			puntosText.text = "Rï¿½cord";
             puntosText.enabled = true;
 			int limite = Mathf.Min(10, puntuaciones.Count);
             for (int i = puntuaciones.Count - 1; i >= puntuaciones.Count - limite; i--)
