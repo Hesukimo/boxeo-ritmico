@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+    using System.Collections.Generic;
 using System.ComponentModel;
 using Mono.Cecil.Cil;
 using NUnit.Framework;
@@ -170,7 +170,7 @@ public class GameManager : MonoBehaviour
                 enemigoTemp.transform.position = new Vector3(-7, transform.position.y, transform.position.z);
                 enemigoTemp.GetComponent<SpriteRenderer>().flipX = true;
             }
-            if (Random.Range(0.0f, 1.0f) < critchance)
+            if (Random.Range(0.0f, 1.0f) <= critchance)
             {
                 extrapoints = true;
             }
